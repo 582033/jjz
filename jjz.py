@@ -112,13 +112,12 @@ jjz = jjz()
 msg = Message()
 res = jjz.check302()
 
-time = time.strftime('%M月%d日%H点%M分', time.localtime())
-
+now = time.strftime('%H点%M分', time.localtime())
 
 if res:
     print '可以办理'
     # 默认每日只提醒3次
-    msg.push('%s 可以办理进京证啦~' % time)
+    msg.push('%s 可以办理进京证啦~' % str(now))
     #msg.push('可以办理进京证啦~', 4)
 else:
     print '不能办理'
