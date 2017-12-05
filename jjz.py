@@ -5,13 +5,16 @@ import base64
 import requests
 import time
 import json
+import ConfigParser
 from werkzeug.contrib.cache import FileSystemCache
 
 # 消息二维码 https://mp.weixin.qq.com/cgi-bin/showqrcode?ticket=gQG_8TwAAAAAAAAAAS5odHRwOi8vd2VpeGluLnFxLmNvbS9xLzAySS1Zdk5aQ2ZlNjAxMDAwME0wNzUAAgQG4u9ZAwQAAAAA
 class Message:
     def __init__(self):
-        self.sendkey = '1194-6d848e48e50333408425d6b8370f612a'
-        self.text = 'yjiang'
+        cf = ConfigParser.ConfigParser()
+        cf.read('conf.ini')
+        self.sendkey = cf.get('pushbear', 'sendkey')
+        self.text = cf.get('pushbear', 'sendname')
         self.push_url = 'https://pushbear.ftqq.com/sub'
         #缓存
         self.cache = FileSystemCache('/tmp/jjz_cache')
