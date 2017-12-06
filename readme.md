@@ -5,6 +5,11 @@
 ![](https://mp.weixin.qq.com/cgi-bin/showqrcode?ticket=gQG_8TwAAAAAAAAAAS5odHRwOi8vd2VpeGluLnFxLmNvbS9xLzAySS1Zdk5aQ2ZlNjAxMDAwME0wNzUAAgQG4u9ZAwQAAAAA)
 
 
+### todo
+
+* 执行日志输出到文件
+
+
 ### 以下是在可以办理的情况下两个网址的get/post请求结果
 
 #### https://enterbj.zhongchebaolian.com/enterbj/platform/enterbj/curtime_03 post
