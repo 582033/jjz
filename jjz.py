@@ -7,6 +7,7 @@ import time
 import json
 import ConfigParser
 from werkzeug.contrib.cache import FileSystemCache
+from log import log
 
 # 消息二维码 https://mp.weixin.qq.com/cgi-bin/showqrcode?ticket=gQG_8TwAAAAAAAAAAS5odHRwOi8vd2VpeGluLnFxLmNvbS9xLzAySS1Zdk5aQ2ZlNjAxMDAwME0wNzUAAgQG4u9ZAwQAAAAA
 class Message:
@@ -63,7 +64,6 @@ class Message:
 
 
 
-
 class jjz:
     def __init__(self):
         self.cafile = './charles-ssl-proxying-certificate.pem'
@@ -111,16 +111,20 @@ class jjz:
             #print '可以办理'
             return True
 
+
+date = time.strftime("%Y-%m", time.localtime())
+log = log('./log/%s.log' % date)
+
 jjz = jjz()
 msg = Message()
 res = jjz.check302()
 
-now = time.strftime('%H点%M分', time.localtime())
 
 if res:
-    print '可以办理'
+    log.debug('可以办理')
     # 默认每日只提醒3次
+    now = time.strftime('%H点%M分', time.localtime())
     msg.push('%s 可以办理进京证啦~' % str(now))
     #msg.push('可以办理进京证啦~', 4)
 else:
-    print '不能办理'
+    log.debug('不能办理')
