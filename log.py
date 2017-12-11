@@ -2,9 +2,15 @@
 # -*- coding: utf-8 -*-
 
 import logging
+import os
+import time
 
 class log:
-    def __init__(self, filepath):
+    def __init__(self):
+        #设置文件目录
+        pj_path = os.path.split(os.path.realpath(__file__))[0]
+        date = time.strftime("%Y-%m", time.localtime())
+        filepath = "%s/log/%s.log" % (pj_path, date)
         # 创建一个logger
         self.logger = logging.getLogger('jjz_logger')
         self.logger.setLevel(logging.DEBUG)

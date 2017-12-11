@@ -5,6 +5,7 @@ import base64
 import requests
 import time
 import json
+import os
 import ConfigParser
 from werkzeug.contrib.cache import FileSystemCache
 from log import log
@@ -13,7 +14,8 @@ from log import log
 class Message:
     def __init__(self):
         cf = ConfigParser.ConfigParser()
-        cf.read('conf.ini')
+        ini_file= "%s/conf.ini" % os.path.split(os.path.realpath(__file__))[0]
+        cf.read(ini_file)
         self.sendkey = cf.get('pushbear', 'sendkey')
         self.text = cf.get('pushbear', 'sendname')
         self.push_url = 'https://pushbear.ftqq.com/sub'
@@ -112,9 +114,8 @@ class jjz:
             return True
 
 
-date = time.strftime("%Y-%m", time.localtime())
-log = log('./log/%s.log' % date)
 
+log = log()
 jjz = jjz()
 msg = Message()
 res = jjz.check302()
@@ -127,4 +128,5 @@ if res:
     msg.push('%s 可以办理进京证啦~' % str(now))
     #msg.push('可以办理进京证啦~', 4)
 else:
-    log.debug('不能办理')
+    #log.debug('不能办理')
+    print('不能办理')
