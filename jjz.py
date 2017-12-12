@@ -9,6 +9,7 @@ from libs import Log, Message
 class jjz:
     def __init__(self):
         self.sign_url = 'https://enterbj.zhongchebaolian.com/enterbj/platform/enterbj/curtime_03'
+        self.error_url = 'https://enterbj.zhongchebaolian.com/errorpage/enterbj.html'
 
     def _request(self, url, headers={}):
         requests.packages.urllib3.disable_warnings()
@@ -26,7 +27,7 @@ class jjz:
         if 'Location' in headers:
             location = headers['Location']
 
-        if  location == 'https://enterbj.zhongchebaolian.com/errorpage/enterbj.html':
+        if  location == self.error_url:
             #print '不能办理'
             return False
         else:
