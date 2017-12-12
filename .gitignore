@@ -1,4 +1,3 @@
 conf.ini
 *.log
-/log/1
 *.pyc
