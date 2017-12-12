@@ -9,8 +9,12 @@ class log:
     def __init__(self):
         #设置文件目录
         pj_path = os.path.split(os.path.realpath(__file__))[0]
+        if not os.path.exists(pj_path):
+            os.mkdir(pj_path)
+
         date = time.strftime("%Y-%m", time.localtime())
         filepath = "%s/log/%s.log" % (pj_path, date)
+
         # 创建一个logger
         self.logger = logging.getLogger('jjz_logger')
         self.logger.setLevel(logging.DEBUG)
@@ -18,6 +22,7 @@ class log:
         # 创建一个handler，用于写入日志文件
         fh = logging.FileHandler(filepath)
         fh.setLevel(logging.DEBUG)
+
         # 再创建一个handler，用于输出到控制台
         ch = logging.StreamHandler()
         ch.setLevel(logging.DEBUG)
