@@ -9,7 +9,10 @@ from libs import Log, Message
 class jjz:
     def __init__(self):
         self.sign_url = 'https://enterbj.zhongchebaolian.com/enterbj/platform/enterbj/curtime_03'
-        self.error_url = 'https://enterbj.zhongchebaolian.com/errorpage/enterbj.html'
+        self.error_url = [
+            'https://enterbj.zhongchebaolian.com/errorpage/enterbj.html',
+            'http://bjjj.zhongchebaolian.com/images/cdn_image.png',
+        ]
 
     def _request(self, url, headers={}):
         requests.packages.urllib3.disable_warnings()
@@ -27,7 +30,7 @@ class jjz:
         if 'Location' in headers:
             location = headers['Location']
 
-        if  location == self.error_url:
+        if  location in self.error_url:
             #print '不能办理'
             return False
         else:
@@ -36,18 +39,20 @@ class jjz:
 
 
 
-log = Log()
-jjz = jjz()
-msg = Message()
-res = jjz.check302()
+if __name__ == '__main__':
+    log = Log()
+    msg = Message()
+    jjz = jjz()
 
-
-if res:
-    log.debug('可以办理')
-    # 默认每日只提醒3次
     now = time.strftime('%H点%M分', time.localtime())
-    msg.push('%s 可以办理进京证啦~' % str(now))
-    #msg.push('可以办理进京证啦~', 4)
-else:
-    #log.debug('不能办理')
-    print('不能办理')
+    res = jjz.check302()
+    if res:
+        log.debug('可以办理')
+        # 默认每日只提醒3次
+        msg.push('%s 可以办理进京证啦~' % str(now))
+        #msg.push('可以办理进京证啦~', 4)
+    else:
+        #log.debug('不能办理')
+        #msg.push('%s 测试' % str(now))
+        print('不能办理')
+
