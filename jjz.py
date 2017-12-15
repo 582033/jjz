@@ -22,9 +22,24 @@ class jjz:
         return r
 
     def check302(self):
-        r = self._request(self.sign_url)
+        headers = {
+                'Host' : 'enterbj.zhongchebaolian.com',
+                'Connection' : 'keep-alive',
+                'Pragma' : 'no-cache',
+                'Cache-Control' : 'no-cache',
+                'Upgrade-Insecure-Requests' : '1',
+                'User-Agent' : 'Mozilla/5.0 (Linux; Android 7.0; MI 5 Build/NRD90M; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/57.0.2987.132 Mobile Safari/537.36',
+                'Accept' : 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8',
+                'Referer': 'https://enterbj.zhongchebaolian.com/enterbj/platform/enterbj/toVehicleType',
+                'Accept-Encoding' : 'gzip, deflate',
+                'Accept-Language' : 'zh-CN,en-US;q=0.8',
+                'Cookie' : 'JSESSIONID=5F9CAA1A713B817DCD8C03D730C1405E; UM_distinctid=15ec7ad338672-0758eb2f67658a-12797d23-38400-15ec7ad338716a; CNZZDATA1260761932=1788518962-1499394672-https%253A%252F%252Fenterbj.zhongchebaolian.com%252F%7C1507934398',
+                'X-Requested-With' : 'com.zcbl.bjjj_driving',
+        }
+        r = self._request(self.sign_url, headers)
         status_code = r.status_code
         headers = r.headers
+        print r.headers
 
         location = ''
         if 'Location' in headers:
