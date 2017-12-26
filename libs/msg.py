@@ -65,7 +65,8 @@ class Message:
                 return False
 
         self.cache.set(self.cache_push_times_key, push_times, timeout=self._shengyu())
-        desp = ("%s [今日已提醒%s次]") % (desp, push_times)
+        github = "\n\n\n\nFork Me On GitHub:\n [https://github.com/582033/jjz](https://github.com/582033/jjz)"
+        desp = ("%s [今日已提醒%s次] %s") % (desp, push_times, github)
         self._send(desp)
 
 
