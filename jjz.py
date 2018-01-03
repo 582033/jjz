@@ -4,39 +4,57 @@
 import requests
 import time
 import os
-from libs import Log, Message
+import random
+from libs import Log, Message, Proxy
 
 class jjz:
     def __init__(self):
-        self.sign_url = 'https://enterbj.zhongchebaolian.com/enterbj/platform/enterbj/curtime_03'
+        self.sign_url = 'https://enterbj.zhongchebaolian.com/enterbj/platform/enterbj/curtime_03?userid=26B0EBD0E8AB47E58FDDCA0861235A7B'
+        self.headers = {
+            'Host' : 'enterbj.zhongchebaolian.com',
+            'Connection' : 'keep-alive',
+            'Content-Length' : '0',
+            'Pragma' : 'no-cache',
+            'Cache-Control' : 'no-cache',
+            'Accept' : 'application/json, text/javascript, */*; q=0.01',
+            'Origin' : 'https://enterbj.zhongchebaolian.com',
+            'X-Requested-With' : 'XMLHttpRequest',
+            'User-Agent' : 'Mozilla/5.0 (Linux; Android 7.0; MI 5 Build/NRD90M; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/62.0.3202.84 Mobile Safari/537.36',
+            'Content-Type' : 'application/json',
+            'Referer' : 'https://enterbj.zhongchebaolian.com/enterbj/platform/enterbj/toVehicleType',
+            'Accept-Encoding' : 'gzip, deflate',
+            'Accept-Language' : 'zh-CN,en-US;q=0.9',
+            'Cookie' : 'JSESSIONID=3B1D99AF5EC0B00C8A06D713CC820DA4; UM_distinctid=16056847d8fa1-0bde8ee3b666dc-442d056d-38400-16056847d911f1; CNZZDATA1260761932=746657558-1513275416-%7C1514633209'
+        }
         self.error_url = [
             'https://enterbj.zhongchebaolian.com/errorpage/enterbj.html',
             'http://bjjj.zhongchebaolian.com/images/cdn_image.png',
         ]
 
+    def _get_proxy(self):
+        proxy_url = "http://www.xicidaili.com/nt/"                                          #代理来源
+        target_url = "https://enterbj.zhongchebaolian.com/enterbj/jsp/enterbj/index.html"   #验证代理的url
+        ver_keyword = "flushbtn"                                                            #验证关键字
+        timeout = 10                                                                        #验证超时时间
+
+        p = Proxy(proxy_url, target_url, ver_keyword, timeout)
+        proxies = p.get()
+        proxy = random.choice(proxies)
+        proxy_obj = { 'http' : proxy }
+        print "获取到有效代理: %s " % proxy
+        return proxy_obj
+
     def _request(self, url, headers={}):
         requests.packages.urllib3.disable_warnings()
+        #获取代理
+        proxy = self._get_proxy()
         #verify             证书
         #allow_redirects    不进行302
-        r = requests.get(url, headers=headers, verify=False, allow_redirects=False)
+        r = requests.post(url, headers=headers, proxies=proxy, verify=False, allow_redirects=False)
         return r
 
     def check302(self):
-        headers = {
-                'Host' : 'enterbj.zhongchebaolian.com',
-                'Connection' : 'keep-alive',
-                'Pragma' : 'no-cache',
-                'Cache-Control' : 'no-cache',
-                'Upgrade-Insecure-Requests' : '1',
-                'User-Agent' : 'Mozilla/5.0 (Linux; Android 7.0; MI 5 Build/NRD90M; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/57.0.2987.132 Mobile Safari/537.36',
-                'Accept' : 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8',
-                'Referer': 'https://enterbj.zhongchebaolian.com/enterbj/platform/enterbj/toVehicleType',
-                'Accept-Encoding' : 'gzip, deflate',
-                'Accept-Language' : 'zh-CN,en-US;q=0.8',
-                'Cookie' : 'JSESSIONID=5F9CAA1A713B817DCD8C03D730C1405E; UM_distinctid=15ec7ad338672-0758eb2f67658a-12797d23-38400-15ec7ad338716a; CNZZDATA1260761932=1788518962-1499394672-https%253A%252F%252Fenterbj.zhongchebaolian.com%252F%7C1507934398',
-                'X-Requested-With' : 'com.zcbl.bjjj_driving',
-        }
-        r = self._request(self.sign_url, headers)
+        r = self._request(self.sign_url, self.headers)
         status_code = r.status_code
         headers = r.headers
         print r.headers
